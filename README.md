@@ -13,13 +13,14 @@ This crate exposes two functions, `prepare_proof` and `verify_proof` that allow 
 
 ``` rust
 fn example_verify_x() {
-    // create a random secret
     let mut rng = ChaCha20Rng::from_seed([1;32]);
     let x: Fr = Fr::rand(&mut rng);
+    let pk: K = K::rand(&mut rng);
+    let d: K = pk.mul(x).into();
     // generate DLEQ proof
-    let proof = prepare_proof(x);
+    let proof = prepare_proof(x, d, pk);
     // check validity
-    let is_valid = verify_proof(x, proof);
+    let is_valid = verify_proof(pk, d, proof);
     // should be valid
     assert!(is_valid);
 }
